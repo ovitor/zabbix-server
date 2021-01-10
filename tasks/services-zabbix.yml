@@ -1,0 +1,26 @@
+---
+# tasks file for zabbix
+
+- name: make sure zabbix-server is started
+  systemd:
+    name: zabbix-server
+    state: restarted
+    enabled: yes
+
+- name: make sure zabbix-agent is started
+  systemd:
+    name: zabbix-agent
+    state: restarted
+    enabled: yes
+
+- name: make sure nginx is started
+  systemd:
+    name: nginx
+    state: restarted
+    enabled: yes
+
+- name: make sure php7.4-fpm is started
+  systemd:
+    name: php7.4-fpm
+    state: restarted
+    enabled: yes

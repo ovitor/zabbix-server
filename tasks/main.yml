@@ -1,0 +1,14 @@
+---
+# tasks file for zabbix
+
+- name: install zabbix common components
+  import_tasks: common-zabbix.yml
+
+- name: ensure zabbix services are running
+  import_tasks: services-zabbix.yml
+
+    #- name: configure zabbix web server
+    #import_tasks: zabbix-web.yml
+
+    #- name: configure zabbix server
+    #import_tasks: zabbix-server.yml

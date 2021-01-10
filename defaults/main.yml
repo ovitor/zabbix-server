@@ -1,0 +1,14 @@
+---
+# defaults file for zabbix
+#
+
+zabbix_version: 5.0
+zabbix_package_name: "zabbix-release_{{zabbix_version}}-1+focal_all.deb"
+zabbix_url: "https://repo.zabbix.com/zabbix/{{ zabbix_version }}/ubuntu/pool/main/z/zabbix-release/{{ zabbix_package_name }}"
+zabbix_timezone: "America/Fortaleza"
+
+zabbix_postgres_dbname:
+zabbix_postgres_host:
+zabbix_postgres_port:
+zabbix_postgres_user:
+zabbix_postgres_pass:

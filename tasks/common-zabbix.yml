@@ -1,0 +1,63 @@
+---
+# tasks file for zabbix
+
+- name: install zabbix {{ zabbix_version }} repository
+  get_url:
+    url: "{{ zabbix_url }}"
+    dest: "/tmp/{{ zabbix_package_name }}"
+
+- name: enable zabbix {{ zabbix_version }} repoitory
+  shell: "dpkg -i /tmp/{{ zabbix_package_name }}"
+
+- name: update sources
+  apt:
+    update_cache: yes
+- name: install zabbix and dependencies
+  apt:
+    pkg:
+      - zabbix-server-pgsql
+      - zabbix-frontend-php
+      - php7.4-pgsql
+      - zabbix-nginx-conf
+      - zabbix-agent
+      - postgresql-client
+    state: present
+
+- name: restore basic zabbix sql
+  community.general.postgresql_db:
+    name: "{{ zabbix_postgres_dbname }}"
+    login_host: "{{ zabbix_postgres_host }}"
+    login_port: "{{ zabbix_postgres_port }}"
+    login_user: "{{ zabbix_postgres_user }}"
+    login_password: "{{ zabbix_postgres_pass }}"
+    state: restore
+    target: /usr/share/doc/zabbix-server-pgsql/create.sql.gz
+
+- name: copy zabbix_server.conf template file
+  template:
+    src: zabbix_server.conf.j2
+    dest: /etc/zabbix/zabbix_server.conf
+    owner: zabbix
+    group: zabbix
+    mode: '0640'
+
+- name: copy nginx.conf template file
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/default
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: copy php-fpm.conf template file
+  template:
+    src: php-fpm.conf.j2
+    dest: /etc/zabbix/php-fpm.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: copy zabbix-php.conf template file
+  template:
+    src: zabbix.conf.php.j2
+    dest: /etc/zabbix/web/zabbix.conf.php
